@@ -1,17 +1,20 @@
 
-interface Instrumento {
-    imagen: string;
-    instrumento: string;
-    marca: string;
-    modelo: string;
-    precio: number;
-    costoEnvio: string;
-    cantidadVendida: number;
-    descripcion: string;
-  }
+import { Link } from 'react-router-dom';
 
-  function InstrumentoCard({ instrumento }: { readonly instrumento: Instrumento }) {
-  const { imagen, instrumento: nombre, marca, modelo, precio, costoEnvio, cantidadVendida, descripcion } = instrumento;
+interface Instrumento {
+  id: string;
+  imagen: string;
+  instrumento: string;
+  marca: string;
+  modelo: string;
+  precio: number;
+  costoEnvio: string;
+  cantidadVendida: number;
+  descripcion: string;
+}
+
+function InstrumentoCard({ instrumento }: { readonly instrumento: Instrumento }) {
+  const { imagen, instrumento: nombre, marca, modelo, precio, costoEnvio, cantidadVendida } = instrumento;
 
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden p-4 transition-transform duration-300 hover:scale-105">
@@ -42,8 +45,10 @@ interface Instrumento {
       {/* Cantidad vendida */}
       <p className="text-sm text-gray-600">Vendidos: {cantidadVendida}</p>
 
-      {/* Descripción */}
-      <p className="text-sm text-gray-700 mt-2">{descripcion}</p>
+      {/* Botón Ver Detalle */}
+      <Link to={`/detalle/${instrumento.id}`} className="block text-blue-500 hover:underline mt-4">
+        Ver Detalle
+      </Link>
     </div>
   );
 }

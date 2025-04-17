@@ -1,4 +1,3 @@
-// src/InstrumentoList.jsx
 
 import InstrumentoCard from './InstrumentoCard';
 

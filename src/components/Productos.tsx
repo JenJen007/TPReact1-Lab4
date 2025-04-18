@@ -1,17 +1,7 @@
 import { useEffect, useState } from 'react';
 import InstrumentoList from './InstrumentoList';
-
-interface Instrumento {
-  id: string;
-  instrumento: string;
-  imagen: string;
-  marca: string;
-  precio: number;
-  cantidadVendida: number;
-  descripcion: string;
-  modelo: string;
-  costoEnvio: string;
-}
+import { getInstrumentos } from '../services/instrumentoService';
+import { Instrumento } from '../models/Instrumento';
 
 function Productos() {
   const [filtro, setFiltro] = useState('');
@@ -20,14 +10,13 @@ function Productos() {
 
   // Cargar los datos desde la API
   useEffect(() => {
-    fetch('http://localhost:5000/api/instrumentos')
-      .then((response) => response.json())
-      .then((data: Instrumento[]) => setInstrumentos(data))
-      .catch((error) => console.error('Error al cargar los datos:', error));
+    getInstrumentos()
+      .then(data => setInstrumentos(data))
+      .catch(error => console.error('Error al cargar los datos:', error));
   }, []);
 
   // Filtrar instrumentos
-  const instrumentosFiltrados = instrumentos.filter((inst) =>
+  const instrumentosFiltrados = instrumentos.filter(inst =>
     inst.instrumento.toLowerCase().includes(filtro.toLowerCase())
   );
 
@@ -47,16 +36,15 @@ function Productos() {
         type="text"
         placeholder="Buscar instrumento..."
         value={filtro}
-        onChange={(e) => setFiltro(e.target.value)}
+        onChange={e => setFiltro(e.target.value)}
         className="w-full p-2 mb-4 border border-gray-300 rounded"
       />
 
       {/* Selector de orden */}
       <select
         value={orden}
-        onChange={(e) => setOrden(e.target.value)}
-        className="p-2 border border-gray-300 rounded mb-4 w-full sm:w-auto"
-      >
+        onChange={e => setOrden(e.target.value)}
+        className="p-2 border border-gray-300 rounded mb-4 w-full sm:w-auto">
         <option value="precio">Precio</option>
         <option value="vendidos">Más vendidos</option>
         <option value="nombre">Nombre</option>
@@ -66,7 +54,9 @@ function Productos() {
       {instrumentosOrdenados.length > 0 ? (
         <InstrumentoList instrumentos={instrumentosOrdenados} />
       ) : (
-        <p className="text-center text-gray-600">No se encontraron resultados.</p>
+        <p className="text-center text-gray-600">
+          No se encontraron resultados.
+        </p>
       )}
     </div>
   );

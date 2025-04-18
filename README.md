@@ -1,54 +1,79 @@
-# React + TypeScript + Vite
+# 🎸 Instrumentos Musicales - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Esta aplicación React se conecta a un backend de Java para mostrar una tienda de instrumentos musicales con varias funcionalidades.
 
-Currently, two official plugins are available:
+## ✨ Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔌 Conexión a API REST desde un backend en Java
+- 🛒 Catálogo de productos con filtros
+- 🎹 Detalles de cada instrumento
+- 🏠 Página de inicio atractiva
+- 📍 Sección "Dónde Estamos" con ubicación
+- 🔍 Búsqueda y filtrado de instrumentos
+- 📱 Diseño responsive con Tailwind CSS
 
-## Expanding the ESLint configuration
+## 🚀 Tecnologías
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Fetch API
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🔄 Conexión con la API
+
+La aplicación utiliza servicios tipados para conectarse al backend:
+
+```typescript
+// Ejemplo de servicio para obtener instrumentos
+export async function getInstrumentos(): Promise<Instrumento[]> {
+  const res = await fetch(`${API_URL}/api/instrumentos`);
+  if (!res.ok) throw new Error('Error al obtener instrumentos');
+  const data = await res.json();
+  // Procesamiento...
+  return items.map(item => new Instrumento(item));
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🎨 Componentes Principales
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 📋 Listado de Productos
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+Muestra todos los instrumentos con filtros por categoría, precio y nombre.
+
+### 🔎 Detalle de Producto
+
+Vista detallada de cada instrumento con:
+
+- Imagen
+- Descripción
+- Precio
+- Información de envío
+- Marca y modelo
+
+### 🏡 Home
+
+Página principal con banner y destacados.
+
+### 📌 Donde Estamos
+
+Muestra la ubicación y datos de contacto de la tienda.
+
+## 🏗️ Estructura de Modelos
+
+Los datos están estructurados en clases tipadas:
+
+```typescript
+// Ejemplo de modelo Instrumento
+export class Instrumento {
+  id: number;
+  nombre: string;
+  precio: number;
+  // ...otros campos
+  categoria: Categoria | null;
+
+  constructor(data: any) {
+    // Inicialización con valores del backend
+  }
+}
 ```

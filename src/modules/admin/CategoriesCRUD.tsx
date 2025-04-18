@@ -1,113 +1,80 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+import { GenericTable } from '../GenericTable';
+import { GenericForm } from '../GenericForm';
+import { categoryTableConfig, categoryFormConfig } from '../configs/categoryConfig';
+import { Categoria } from '../../models/Categoria';
 
-export const CategoriesCRUD = () => {
-  const [categorias, setCategorias] = useState([
-    { nombre: "Carnes", habilitado: true },
-    { nombre: "Verduras", habilitado: false },
-  ]);
-  const [nuevaCategoria, setNuevaCategoria] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [filtro, setFiltro] = useState("");
+export function CategoriesCrud() {
+  const [categories, setCategories] = useState<Categoria[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState<Categoria | null>(null);
 
-  const handleAgregar = () => {
-    if (!nuevaCategoria.trim()) return;
+  useEffect(() => {
+    fetch('http://localhost:8080/api/categoria')
+      .then(res => res.json())
+      .then((data: Categoria[]) => {
+        setCategories(data);
+        setLoading(false);
+      });
+  }, []);
 
-    const yaExiste = categorias.some(cat => cat.nombre === nuevaCategoria);
-    if (yaExiste) return;
+  const handleSave = (values: Partial<Categoria>) => {
+    setLoading(true);
+    const method = editing ? 'PUT' : 'POST';
+    const url = editing ? `http://localhost:8080/api/categoria/${editing.id}` : 'http://localhost:8080/api/categoria';
+    fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    })
+      .then(res => res.json())
+      .then(() => {
+        setShowForm(false);
+        setEditing(null);
+        return fetch('http://localhost:8080/api/categoria')
+          .then(res => res.json())
+          .then((data: Categoria[]) => setCategories(data));
+      })
+      .finally(() => setLoading(false));
+  };
 
-    setCategorias([...categorias, { nombre: nuevaCategoria, habilitado: true }]);
-    setNuevaCategoria("");
-    setModalOpen(false);
+  const handleDelete = (row: Categoria) => {
+    setLoading(true);
+    fetch(`http://localhost:8080/api/categoria/${row.id}`, { method: 'DELETE' })
+      .then(() => fetch('http://localhost:8080/api/categoria'))
+      .then(res => res.json())
+      .then((data: Categoria[]) => setCategories(data))
+      .finally(() => setLoading(false));
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <div className="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <label className="font-semibold mr-2">Filtrar por categoría:</label>
-            <select
-              value={filtro}
-              onChange={(e) => setFiltro(e.target.value)}
-              className="border border-red-500 rounded px-2 py-1"
-            >
-              <option value="">Todas</option>
-              {[...new Set(categorias.map(c => c.nombre))].map((nombre, idx) => (
-                <option key={idx} value={nombre}>{nombre}</option>
-              ))}
-            </select>
-          </div>
-          <button
-            className="bg-red-500 text-white px-4 py-2 rounded font-bold hover:bg-red-600"
-            onClick={() => setModalOpen(true)}
-          >
-            AGREGAR CATEGORÍA
-          </button>
-        </div>
-
-        {/* Tabla */}
-        <table className="w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-red-100 text-gray-700">
-              <th className="p-3 text-left">Categoría</th>
-              <th className="p-3">Habilitado</th>
-              <th className="p-3 text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categorias
-              .filter(cat => !filtro || cat.nombre === filtro)
-              .map((cat, idx) => (
-                <tr key={idx} className="border-b hover:bg-gray-50">
-                  <td className="p-3">{cat.nombre}</td>
-                  <td className="p-3 text-center">
-                    {cat.habilitado ? (
-                      <span className="bg-green-100 text-green-700 rounded-full px-2 py-1 text-sm">👍</span>
-                    ) : (
-                      <span className="bg-red-100 text-red-600 rounded-full px-2 py-1 text-sm">👎</span>
-                    )}
-                  </td>
-                  <td className="p-3 text-center space-x-2">
-                    <button className="hover:text-blue-500 text-lg">👁️</button>
-                    <button className="hover:text-yellow-500 text-lg">✏️</button>
-                    <button className="hover:text-red-500 text-lg">❌</button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+    <div className="p-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Categorías</h1>
+        <button
+          onClick={() => { setEditing(null); setShowForm(true); }}
+          className="bg-pink-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-pink-700"
+        >
+          Nueva Categoría
+        </button>
       </div>
-
-      {/* Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-md w-96">
-            <h2 className="text-xl font-semibold mb-4">Agregar Categoría</h2>
-            <input
-              type="text"
-              placeholder="Nombre de la categoría"
-              value={nuevaCategoria}
-              onChange={(e) => setNuevaCategoria(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-            />
-            <div className="flex justify-end space-x-2">
-              <button
-                className="px-4 py-2 bg-gray-300 text-gray-800 rounded"
-                onClick={() => setModalOpen(false)}
-              >
-                Cancelar
-              </button>
-              <button
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                onClick={handleAgregar}
-              >
-                Agregar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <GenericTable<Categoria>
+        columns={categoryTableConfig.columns}
+        data={categories}
+        onEdit={row => { setEditing(row); setShowForm(true); }}
+        onDelete={handleDelete}
+        loading={loading}
+      />
+      <GenericForm<Categoria>
+        fields={categoryFormConfig}
+        initialValues={editing || {}}
+        open={showForm}
+        onSave={handleSave}
+        onCancel={() => { setShowForm(false); setEditing(null); }}
+        loading={loading}
+        title={editing ? 'Editar Categoría' : 'Nueva Categoría'}
+      />
     </div>
   );
-};
+}

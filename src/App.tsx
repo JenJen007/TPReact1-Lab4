@@ -4,8 +4,8 @@ import Home from './components/Home';
 import Productos from './components/Productos';
 import DetalleInstrumento from './components/DetalleInstrumento';
 import DondeEstamos from './components/DondeEstamos';
-import { CategoriesCRUD } from './modules/admin/CategoriesCRUD';
-import { InstrumentosCRUD } from './modules/admin/InstrumentosCRUD';
+import { CategoriesCrud } from './modules/admin/CategoriesCrud';
+import { InstrumentsCrud } from "./modules/admin/InstrumentsCrud";
 
 function App() {
   return (
@@ -31,11 +31,11 @@ function App() {
           />
             <Route
               path="/categorias"
-              element={<CategoriesCRUD />}
+              element={<CategoriesCrud />}
             />
             <Route
               path="/instrumentos"
-              element={<InstrumentosCRUD />}
+              element={<InstrumentsCrud />}
             />
         </Routes>
       </div>

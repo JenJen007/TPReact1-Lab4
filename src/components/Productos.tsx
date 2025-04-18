@@ -15,22 +15,34 @@ function Productos() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
   useEffect(() => {
-    getInstrumentos().then(setInstrumentos).catch(console.error);
-    getCategorias().then(setCategorias).catch(console.error);
+    getInstrumentos()
+      .then(data => {
+        setInstrumentos(data);
+      })
+      .catch(error => {
+        console.error('Error obteniendo instrumentos:', error);
+      });
+    getCategorias()
+      .then(data => {
+        setCategorias(data);
+      })
+      .catch(error => {
+        console.error('Error obteniendo categorias:', error);
+      });
   }, []);
 
   const instrumentosFiltrados = instrumentos.filter(
     inst =>
       (categoriaSeleccionada === '' ||
         (inst.categoria && inst.categoria.id === categoriaSeleccionada)) &&
-      inst.nombre?.toLowerCase().includes(filtro.toLowerCase())
+      inst.instrumento?.toLowerCase().includes(filtro.toLowerCase())
   );
 
   const instrumentosOrdenados = [...instrumentosFiltrados].sort((a, b) => {
     if (orden === 'precio') return a.precio - b.precio;
     if (orden === 'vendidos')
       return Number(b.cantidadVendida) - Number(a.cantidadVendida);
-    return a.nombre.localeCompare(b.nombre);
+    return a.instrumento.localeCompare(b.instrumento);
   });
 
   return (

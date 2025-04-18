@@ -5,6 +5,7 @@ import Home from './components/Home';
 import Productos from './components/Productos';
 import DetalleInstrumento from './components/DetalleInstrumento';
 import DondeEstamos from './components/DondeEstamos';
+import CategoriesCRUD from './modules/admin/CategoriesCRUD';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/productos" element={<Productos />} />
         <Route path="/detalle/:id" element={<DetalleInstrumento />} />
         <Route path="/donde-estamos" element={<DondeEstamos />} />
+        <Route path="/admin" element={<CategoriesCRUD />} />
       </Routes>
     </div>
   </Router>

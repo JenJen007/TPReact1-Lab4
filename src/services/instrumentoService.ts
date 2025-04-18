@@ -9,21 +9,7 @@ export async function getInstrumentos(): Promise<Instrumento[]> {
   const data = await res.json();
   // Si el backend devuelve { data: [...] }
   const items = Array.isArray(data.data) ? data.data : data;
-  console.log('items', items)
-  return items.map((item: any) =>
-    new Instrumento({
-      id: item.id,
-      instrumento: item.instrumento,
-      marca: item.marca,
-      modelo: item.modelo,
-      imagen: item.imagen,
-      precio: item.precio,
-      costoEnvio: item.costoEnvio,
-      cantidadVendida: item.cantidadVendida,
-      descripcion: item.descripcion,
-      categoria: item.categoria
-    })
-  );
+  return items.map((item: Instrumento) => new Instrumento(item));
 }
 
 export async function getInstrumentoById(id: string): Promise<Instrumento> {
@@ -32,16 +18,5 @@ export async function getInstrumentoById(id: string): Promise<Instrumento> {
   const data = await res.json();
   // Si el backend devuelve { data: {...} }
   const item = data.data ?? data;
-  return new Instrumento({
-    id: item.id,
-    instrumento: item.instrumento,
-    marca: item.marca,
-    modelo: item.modelo,
-    imagen: item.imagen,
-    precio: item.precio,
-    costoEnvio: item.costoEnvio,
-    cantidadVendida: item.cantidadVendida,
-    descripcion: item.descripcion,
-    categoria: item.categoria
-  });
+  return new Instrumento(item);
 }

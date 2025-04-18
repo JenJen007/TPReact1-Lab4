@@ -6,17 +6,18 @@ function InstrumentoCard({
 }: {
   readonly instrumento: Instrumento;
 }) {
+  console.log(instrumento)
   return (
     <Link to={`/detalle/${instrumento.id}`}>
       <div className="flex gap-4 item-container bg-white shadow-lg rounded-lg overflow-hidden p-4 transition-transform duration-300 hover:scale-105">
         <img
           src={`/img/${instrumento.imagen}`}
-          alt={instrumento.nombre}
+          alt={instrumento.instrumento}
           className="flex-1/3 item-image w-full h-60 object-contain mb-4"
         />
         <div className="flex-2/3 item-info">
           <h2 className="item-title text-2xl font-semibold text-gray-800">
-            {instrumento.nombre}
+            {instrumento.instrumento}
           </h2>
           <p className="item-price text-3xl mt-2">
             ${parseFloat(instrumento.precio.toString()).toLocaleString()}

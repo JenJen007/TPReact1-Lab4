@@ -15,10 +15,10 @@ function InstrumentoCard({
           className="flex-1/3 item-image w-full h-60 object-contain mb-4"
         />
         <div className="flex-2/3 item-info">
-          <h2 className="item-title text-xl font-semibold text-gray-800">
+          <h2 className="item-title text-2xl font-semibold text-gray-800">
             {instrumento.instrumento}
           </h2>
-          <p className="item-price text-lg font-bold text-green-600 mt-2">
+          <p className="item-price text-3xl mt-2">
             ${parseFloat(instrumento.precio.toString()).toLocaleString()}
           </p>
           {instrumento.costoEnvio === 'G' ? (
@@ -53,8 +53,6 @@ function InstrumentoCard({
           <p className="item-vendidos text-sm text-gray-600 mt-2">
             {instrumento.cantidadVendida} vendidos
           </p>
-          <p className="text-sm text-gray-600">Marca: {instrumento.marca}</p>
-          <p className="text-sm text-gray-600">Modelo: {instrumento.modelo}</p>
         </div>
       </div>
     </Link>

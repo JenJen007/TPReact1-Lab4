@@ -6,7 +6,6 @@ function InstrumentoCard({
 }: {
   readonly instrumento: Instrumento;
 }) {
-  console.log(instrumento)
   return (
     <Link to={`/detalle/${instrumento.id}`}>
       <div className="flex gap-4 item-container bg-white shadow-lg rounded-lg overflow-hidden p-4 transition-transform duration-300 hover:scale-105">

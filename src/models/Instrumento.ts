@@ -1,23 +1,29 @@
+import { Categoria } from './Categoria';
+
 export class Instrumento {
-  id: string;
-  instrumento: string;
-  imagen: string;
+  id: number;
+  nombre: string;
+  tipo: string;
+  precio: number;
   marca: string;
   modelo: string;
-  precio: number;
+  imagen: string;
   costoEnvio: string;
-  cantidadVendida: number;
+  cantidadVendida: string;
   descripcion: string;
+  categoria: Categoria | null;
 
   constructor(data: any) {
     this.id = data.id;
-    this.instrumento = data.instrumento;
-    this.imagen = data.imagen;
+    this.nombre = data.nombre;
+    this.tipo = data.tipo;
+    this.precio = data.precio;
     this.marca = data.marca;
     this.modelo = data.modelo;
-    this.precio = Number(data.precio);
+    this.imagen = data.imagen;
     this.costoEnvio = data.costoEnvio;
-    this.cantidadVendida = Number(data.cantidadVendida);
+    this.cantidadVendida = data.cantidadVendida;
     this.descripcion = data.descripcion;
+    this.categoria = data.categoria ? new Categoria(data.categoria) : null;
   }
 }

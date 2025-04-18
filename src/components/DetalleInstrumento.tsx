@@ -23,7 +23,7 @@ function DetalleInstrumento() {
       <div className="md:w-2/3 flex flex-col items-center">
         <img
           src={`/img/${instrumento.imagen}`}
-          alt={instrumento.instrumento}
+          alt={instrumento.nombre}
           className="w-full max-w-xl h-64 object-contain mb-4 rounded-lg"
         />
         <div className="mt-4 w-full">
@@ -38,7 +38,7 @@ function DetalleInstrumento() {
         <p className="text-sm text-gray-500 mb-1">
           {instrumento.cantidadVendida} vendidos
         </p>
-        <h1 className="text-2xl font-bold mb-2">{instrumento.instrumento}</h1>
+        <h1 className="text-2xl font-bold mb-2">{instrumento.nombre}</h1>
         <p className="text-3xl mb-2">
           $ {parseFloat(instrumento.precio.toString()).toLocaleString()}
         </p>

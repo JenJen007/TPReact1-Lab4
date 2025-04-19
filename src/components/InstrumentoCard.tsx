@@ -1,55 +1,61 @@
-
 import { Link } from 'react-router-dom';
+import { Instrumento } from '../models/Instrumento';
 
-interface Instrumento {
-  id: string;
-  imagen: string;
-  instrumento: string;
-  marca: string;
-  modelo: string;
-  precio: number;
-  costoEnvio: string;
-  cantidadVendida: number;
-  descripcion: string;
-}
-
-function InstrumentoCard({ instrumento }: { readonly instrumento: Instrumento }) {
-  const { imagen, instrumento: nombre, marca, modelo, precio, costoEnvio, cantidadVendida } = instrumento;
-
+function InstrumentoCard({
+  instrumento,
+}: {
+  readonly instrumento: Instrumento;
+}) {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden p-4 transition-transform duration-300 hover:scale-105">
-      {/* Contenedor de la imagen */}
-      <div className="relative h-60 overflow-hidden mb-4">
+    <Link to={`/detalle/${instrumento.id}`}>
+      <div className="flex gap-4 item-container bg-white shadow-lg rounded-lg overflow-hidden p-4 transition-transform duration-300 hover:scale-105">
         <img
-          src={`/img/${imagen}`}
-          alt={nombre}
-          className="w-full h-full object-cover"
+          src={`/img/${instrumento.imagen}`}
+          alt={instrumento.instrumento}
+          className="flex-1/3 item-image w-full h-60 object-contain mb-4"
         />
+        <div className="flex-2/3 item-info">
+          <h2 className="item-title text-2xl font-semibold text-gray-800">
+            {instrumento.instrumento}
+          </h2>
+          <p className="item-price text-3xl mt-2">
+            ${parseFloat(instrumento.precio.toString()).toLocaleString()}
+          </p>
+          {instrumento.costoEnvio === 'G' ? (
+            <div className="item-envio gratis flex items-center gap-2 text-green-600 mt-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="icon icon-tabler icons-tabler-outline icon-tabler-truck">
+                <path
+                  stroke="none"
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                />
+                <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />
+              </svg>
+              Envío gratis a todo el país
+            </div>
+          ) : (
+            <p className="item-envio precio text-orange-600 mt-2">
+              Costo de Envío Interior de Argentina: ${instrumento.costoEnvio}
+            </p>
+          )}
+          <p className="item-vendidos text-sm text-gray-600 mt-2">
+            {instrumento.cantidadVendida} vendidos
+          </p>
+        </div>
       </div>
-
-      {/* Información del instrumento */}
-      <h2 className="text-xl font-semibold text-gray-800">{nombre}</h2>
-      <p className="text-sm text-gray-600">Marca: {marca}</p>
-      <p className="text-sm text-gray-600">Modelo: {modelo}</p>
-      <p className="text-lg font-bold text-green-600 mt-2">${precio}</p>
-
-      {/* Costo de envío */}
-      <p className="text-sm text-gray-600">
-        {costoEnvio === 'G' ? (
-          <span className="text-green-600">Envío gratis a todo el país</span>
-        ) : (
-          <span className="text-orange-600">Costo de envío: $${costoEnvio}</span>
-        )}
-      </p>
-
-      {/* Cantidad vendida */}
-      <p className="text-sm text-gray-600">Vendidos: {cantidadVendida}</p>
-
-      {/* Botón Ver Detalle */}
-      <Link to={`/detalle/${instrumento.id}`} className="block text-blue-500 hover:underline mt-4">
-        Ver Detalle
-      </Link>
-    </div>
+    </Link>
   );
 }
 
